@@ -11,7 +11,7 @@ public class DiplomacyClientTest {
 	public void loginTest() {
 		try {
 			DiplomacyClient.login("user", "password");
-			DiplomacyClient.checkMessages();
+			DiplomacyClient.checkMessages(31137);
 		} catch (Exception e) {
 			Assert.fail("Could not login");
 		}

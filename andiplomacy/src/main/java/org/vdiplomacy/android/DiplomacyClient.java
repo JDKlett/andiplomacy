@@ -24,9 +24,9 @@ public class DiplomacyClient {
 		cookie = response.getCookie();
 	}
 	
-	public static boolean checkMessages() throws Exception {
+	public static boolean checkMessages(int matchid) throws Exception {
 		DiplomacyResponse response = new DiplomacyResponse(connect(), cookie);
-		return DiplomacyResponseProcessor.areNewMessagesPresent(response);
+		return DiplomacyResponseProcessor.areNewMessagesPresent(response, matchid);
 	}
 
 	public static HttpURLConnection connect() throws Exception{
