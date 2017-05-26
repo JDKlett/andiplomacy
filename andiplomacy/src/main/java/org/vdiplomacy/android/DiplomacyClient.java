@@ -1,14 +1,8 @@
 package org.vdiplomacy.android;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 
 /**
  * This example demonstrates basics of request execution with the HttpClient
@@ -17,39 +11,32 @@ import org.jsoup.select.Elements;
 public class DiplomacyClient {
 
 	private	static String httpsURL = "_INDEX_";
+	private static String cookie = null;
 	
-	public static void request(String cookie) throws Exception {
+	public static void login(String user, String password) throws Exception{
+		HttpURLConnection request = connect();
+		request.setRequestMethod("POST");
+		request.setDoOutput(true);
+		OutputStreamWriter writer = new OutputStreamWriter(request.getOutputStream());
+		writer.write("loginuser="+user+"&loginpass="+password);
+		writer.flush();
+		DiplomacyResponse response = new DiplomacyResponse(request);
+		cookie = response.getCookie();
+	}
+	
+	public static boolean checkMessages() throws Exception {
+		DiplomacyResponse response = new DiplomacyResponse(connect(), cookie);
+		return DiplomacyResponseProcessor.areNewMessagePresent(response);
+	}
+
+	public static HttpURLConnection connect() throws Exception{
 		URL myurl = new URL(httpsURL);
 		//if you need a proxy...
 //		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
 //				"127.0.0.1", 800));
 //		HttpURLConnection con = (HttpURLConnection) myurl.openConnection(proxy);
 		HttpURLConnection con = (HttpURLConnection) myurl.openConnection();
-		con.setRequestProperty("Cookie", cookie);
-		InputStream ins = con.getInputStream();
-		InputStreamReader isr = new InputStreamReader(ins);
-		BufferedReader in = new BufferedReader(isr);
-		StringBuilder sb = new StringBuilder();
-		String inputLine;
-		while ((inputLine = in.readLine()) != null) {
-			sb.append(inputLine);
-		}
-		in.close();
-		Document doc = Jsoup.parse(sb.toString());
-		Elements select = doc.select("a[gameid=\"31137\"] img");
-		Elements notify = select.select("[alt=\"New Messages\"");
-		if(!notify.isEmpty()){
-			System.out.println(notify.toString());
-		} else {
-			System.out.println("No items found");
-		}
+		return con;
 	}
-
-	public static void main(String[] args) {
-		try {
-			DiplomacyClient.request("COOKIECOOKIECOOKIE YEAH");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+	
 }
