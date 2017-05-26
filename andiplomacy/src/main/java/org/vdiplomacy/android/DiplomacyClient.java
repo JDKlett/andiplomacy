@@ -26,7 +26,7 @@ public class DiplomacyClient {
 	
 	public static boolean checkMessages() throws Exception {
 		DiplomacyResponse response = new DiplomacyResponse(connect(), cookie);
-		return DiplomacyResponseProcessor.areNewMessagePresent(response);
+		return DiplomacyResponseProcessor.areNewMessagesPresent(response);
 	}
 
 	public static HttpURLConnection connect() throws Exception{

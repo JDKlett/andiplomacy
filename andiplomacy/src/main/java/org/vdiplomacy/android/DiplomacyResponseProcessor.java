@@ -8,7 +8,7 @@ import org.jsoup.select.Elements;
 
 public class DiplomacyResponseProcessor {
 
-	public static boolean areNewMessagePresent(DiplomacyResponse response){
+	public static boolean areNewMessagesPresent(DiplomacyResponse response){
 		try{
 			Document doc = Jsoup.parse(response.getBody());
 			Elements select = doc.select("a[gameid=\"31137\"] img");
