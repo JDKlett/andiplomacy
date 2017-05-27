@@ -40,18 +40,22 @@ public class DiplomacyResponse {
 		return cookie;
 	}
 	
-	public String getBody() throws IOException{
-		connection.addRequestProperty("Cookie", cookie);
-		InputStream ins = connection.getInputStream();
-		InputStreamReader isr = new InputStreamReader(ins);
-		BufferedReader in = new BufferedReader(isr);
-		StringBuilder sb = new StringBuilder();
-		String inputLine;
-		while ((inputLine = in.readLine()) != null) {
-			sb.append(inputLine);
+	public String getBody(){
+		try{
+			connection.addRequestProperty("Cookie", cookie);
+			InputStream ins = connection.getInputStream();
+			InputStreamReader isr = new InputStreamReader(ins);
+			BufferedReader in = new BufferedReader(isr);
+			StringBuilder sb = new StringBuilder();
+			String inputLine;
+			while ((inputLine = in.readLine()) != null) {
+				sb.append(inputLine);
+			}
+			in.close();
+			return sb.toString();
+		} catch (IOException e){
+			return null;
 		}
-		in.close();
-		return sb.toString();
 	}
 	
 }
