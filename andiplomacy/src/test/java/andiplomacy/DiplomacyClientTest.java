@@ -12,7 +12,7 @@ public class DiplomacyClientTest {
 	@Test
 	public void loginTest() {
 		try {
-			DiplomacyClient.login("admin", "password");
+			DiplomacyClient.login("jdk1", "password1");
 		} catch (Exception e) {
 			Assert.fail("Could not login");
 		}

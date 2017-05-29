@@ -1,10 +1,12 @@
 package org.vdiplomacy.android;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * This example demonstrates basics of request execution with the HttpClient
@@ -12,9 +14,10 @@ import java.util.List;
  */
 public class DiplomacyClient {
 
-	private	static String httpsURL = "_INDEX_";
+	private	static String httpURL = null;
 	private static String cookie = null;
 	private static boolean loggedIn = false;
+	private static final String PROPERTY_FILE = "server.conf";
 	
 	public static boolean login(String user, String password) throws Exception{
 		HttpURLConnection request = connect();
@@ -47,9 +50,24 @@ public class DiplomacyClient {
 		}
 	}
 
-	public static HttpURLConnection connect() throws DiplomacyAuthenticationException{
+	private static void init(){
 		try {
-			URL myurl = new URL(httpsURL);
+		if(httpURL == null){
+				ClassLoader classLoader = DiplomacyClient.class.getClassLoader();
+				InputStream input = classLoader.getResourceAsStream(PROPERTY_FILE);
+				Properties prop = new Properties();
+				prop.load(input);
+				httpURL = prop.getProperty("url");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static HttpURLConnection connect() throws DiplomacyAuthenticationException{
+		init();
+		try {
+			URL myurl = new URL(httpURL);
 			//if you need a proxy...
 	//		Proxy proxy = new Proxy(Proxy.Type.HTTP, new InetSocketAddress(
 	//				"127.0.0.1", 800));
