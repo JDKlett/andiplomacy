@@ -27,6 +27,12 @@ public class DiplomacyResponseProcessor {
 		return select.select(selector);
 	}
 	
+	public static boolean isValidCookie(DiplomacyResponse response){
+		Elements headerWelcome = select(response, "#header-welcome");
+		Elements points = select(headerWelcome, "img[alt=\"D\"]");
+		return !points.isEmpty();
+	}
+	
 	public static boolean areNewMessagesPresent(DiplomacyResponse response, int matchid){
 		Elements messageTab = select(response, "a[gameid=\""+matchid+"\"] img");
 		Elements notify = select(messageTab, "[alt=\"New Messages\"]");

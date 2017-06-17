@@ -32,6 +32,17 @@ public class DiplomacyClient {
 		return loggedIn;
 	}
 	
+	public static String getCookie(){
+		return cookie;
+	}
+	
+	public static boolean login(String cookie) throws Exception{
+		DiplomacyClient.cookie = cookie;
+		DiplomacyResponse response = new DiplomacyResponse(connect(), cookie);
+		loggedIn = DiplomacyResponseProcessor.isValidCookie(response);
+		return loggedIn;
+	}
+	
 	public static List<Integer> getMatches() throws DiplomacyAuthenticationException{
 		if(loggedIn){
 			DiplomacyResponse response = new DiplomacyResponse(connect(), cookie);
